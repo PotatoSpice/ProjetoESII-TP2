@@ -6,6 +6,8 @@ public class FileManagement {
     private String path;
     private String query;
     protected File[] dirfiles;
+    protected File[] dirTempfiles;
+    private int [][] matrixequivalencia;
 
 
     public FileManagement(String path){
@@ -35,12 +37,25 @@ public class FileManagement {
 
     }
 
+    public void setTempFiles(){
+        File dirpath= new File(path);
+
+        dirTempfiles = dirpath.listFiles((dir, name) -> {
+            if (name.toLowerCase().endsWith(".temp") ) {
+                return new File(dir,name).isFile();
+            }else{
+                return false;
+            }
+        });
+
+    }
+
 
     //Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação;
     public void fileReader(){
 
         ArrayList<String> content;
-
+        setFiles();
         for(int ix=0; ix<this.dirfiles.length; ix++){
             content = new ArrayList<String>();
 
@@ -72,12 +87,45 @@ public class FileManagement {
 
     }
 
-    public  void queryFile(){
+
+    //Procura entre os ficheiros temporários pela query do utilizador. Guarda as repetições em Array de Inteiros.
+
+    public void queryFile(){
 
         QueryManagement queryManagement = new QueryManagement();
+        ArrayList<String> query= new ArrayList<String>(queryManagement.getTrimmedquery());
+        setTempFiles();
+        matrixequivalencia= new int[this.dirTempfiles.length][query.size()];
 
-        
+        for (int ix=0; ix<this.dirTempfiles.length; ix++){
 
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(this.dirTempfiles[ix]));
+
+                while(br.readLine()!=null){
+                    for (int i=0; i<query.size();i++){
+
+                        if(br.readLine().contains(query.get(i))){
+
+                            matrixequivalencia[ix][i]=matrixequivalencia[ix][i]+1;
+
+                        }
+
+
+                    }
+
+
+
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
     }
 
