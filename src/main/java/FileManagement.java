@@ -5,8 +5,8 @@ public class FileManagement {
 
     private String path;
     private String query;
-    protected File[] dirfiles;
-    protected File[] dirTempfiles;
+    private File[] dirfiles;
+    private File[] dirTempfiles;
     private int [][] matrixequivalencia;
 
 
@@ -104,30 +104,22 @@ public class FileManagement {
 
                 while(br.readLine()!=null){
                     for (int i=0; i<query.size();i++){
-
+                        int lastindex=0;
                         if(br.readLine().contains(query.get(i))){
-
-                            matrixequivalencia[ix][i]=matrixequivalencia[ix][i]+1;
-
+                            while((lastindex=br.readLine().indexOf(query.get(1),lastindex))<=query.size()) {
+                                matrixequivalencia[ix][i] = matrixequivalencia[ix][i];
+                                lastindex++;
+                            }
                         }
-
-
                     }
-
-
-
                 }
-
+                br.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
-
     }
-
 
 }
