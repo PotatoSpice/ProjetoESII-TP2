@@ -24,7 +24,7 @@ public class FileManagement {
     }
     */
 
-    public void setFiles(){
+    private void setFiles(){
         File dirpath= new File(path);
 
         dirfiles = dirpath.listFiles((dir, name) -> {
@@ -37,11 +37,11 @@ public class FileManagement {
 
     }
 
-    public void setTempFiles(){
+    private void setTempFiles(){
         File dirpath= new File(path);
 
         dirTempfiles = dirpath.listFiles((dir, name) -> {
-            if (name.toLowerCase().endsWith(".temp") ) {
+            if (name.toLowerCase().endsWith(".tmp") ) {
                 return new File(dir,name).isFile();
             }else{
                 return false;
@@ -54,6 +54,7 @@ public class FileManagement {
     //Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação;
     public void fileReader(){
 
+        String line;
         ArrayList<String> content;
         setFiles();
         for(int ix=0; ix<this.dirfiles.length; ix++){
@@ -62,8 +63,8 @@ public class FileManagement {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(this.dirfiles[ix]));
 
-                while (br.readLine()!=null){
-                    content.add(br.readLine().replaceAll("[^\\p{L} ]",""));
+                while ((line=br.readLine())!=null){
+                    content.add(line.replaceAll("[^\\p{L} ]",""));
                 }
 
                 try {
@@ -98,16 +99,16 @@ public class FileManagement {
         matrixequivalencia= new int[this.dirTempfiles.length][query.size()];
 
         for (int ix=0; ix<this.dirTempfiles.length; ix++){
-
+            String line;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(this.dirTempfiles[ix]));
 
-                while(br.readLine()!=null){
+                while((line=br.readLine())!=null){
                     for (int i=0; i<query.size();i++){
                         int lastindex=0;
-                        if(br.readLine().contains(query.get(i))){
-                            while((lastindex=br.readLine().indexOf(query.get(1),lastindex))<=query.size()) {
-                                matrixequivalencia[ix][i] = matrixequivalencia[ix][i];
+                        if(line.contains(query.get(i))){
+                            while((lastindex=line.indexOf(query.get(1),lastindex))<=query.size()) {
+                                matrixequivalencia[ix][i] = matrixequivalencia[ix][i]+1;
                                 lastindex++;
                             }
                         }
