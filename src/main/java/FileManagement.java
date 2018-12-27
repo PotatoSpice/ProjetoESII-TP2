@@ -11,7 +11,6 @@ public class FileManagement {
 
 
     public FileManagement(String path){
-
         this.path=path;
     }
 
