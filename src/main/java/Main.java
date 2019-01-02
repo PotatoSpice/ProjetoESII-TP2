@@ -1,10 +1,12 @@
+import java.io.IOException;
+
 public class Main {
 
     public static void main(String[] args){
 
         //Vou colocar aqui só para ficar já
 
-        InputManager inputManager = new InputManager();
+        /*InputManager inputManager = new InputManager();
 
         do{
 
@@ -20,8 +22,15 @@ public class Main {
 
         QueryManagement queryManagement = new QueryManagement(inputManager.getQuery());
         FileManagement fileManagement = new FileManagement(inputManager.getPath());
+    */
 
+        FileManagement f = new FileManagement();
 
+        try {
+            System.out.println(f.getCurrentDirectory());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
