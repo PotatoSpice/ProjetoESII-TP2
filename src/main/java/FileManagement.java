@@ -46,6 +46,14 @@ public class FileManagement {
         filecounter = dirfiles.length;
     }
 
+    public String[] getFileString(){
+
+        String[] dirfilestring = new String[dirfiles.length];
+        for(int ix=0; ix<dirfiles.length; ix++)
+            dirfilestring[ix]=dirfiles[ix].toString();
+        return dirfilestring;
+    }
+
     /**
      * Vai buscar os ficheiros temporários criados, com a informação organizada
      */

@@ -71,4 +71,8 @@ public class MatrixManagement {
             }
         }
     }
+
+    public double[] getGrausemelhanca(){
+        return grausemelhanca;
+    }
 }
