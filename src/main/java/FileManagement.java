@@ -71,7 +71,7 @@ public class FileManagement {
     }
 
     /** LF-01.1.A
-     * @param content ArrayList com o conteúdo do documento, organizado linha a linha.
+     * @param content ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
      * @param filename Nome do ficheiro de onde a informação foi lida. Passará para o ficheiro temporário.
      */
     public void createTempfile(ArrayList<String> content, String filename) {
@@ -93,7 +93,7 @@ public class FileManagement {
 
     /**
      * LF-01 + LF-01.1 + Implemetação LF-01.1.A
-     *   Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação;
+     *   Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
      */
 
     public void fileReader() {
@@ -125,7 +125,8 @@ public class FileManagement {
 
 
     /** LF-01.2
-     *  Procura entre os ficheiros temporários pela query do utilizador. Guarda as repetições em Matriz de Inteiros.
+     *  Procura entre os ficheiros temporários pela query do utilizador. Guarda as repetições em Matriz de Inteiros, a chamada Matriz de
+     *  de equivalência.
      */
     public void queryFile() {
 
