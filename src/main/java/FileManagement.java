@@ -1,11 +1,17 @@
-import java.io.*;
-import java.util.ArrayList;
+import Interfaces.FileManagementInterface;
 
-public class FileManagement {
+import java.io.*;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class FileManagement<T> implements FileManagementInterface<T> {
+
 
     private int filecounter; //colunas da matriz
     private int querycounter; //linhas da matriz
-    private String path;
+    private String path = "files/";
     private File[] dirfiles;
     private File[] dirTempfiles;
     private int[][] matrixequivalencia;
@@ -17,19 +23,43 @@ public class FileManagement {
     }
 
     public FileManagement(String path) {
+
         this.path = path;
     }
 
-  /*  Está aqui para me lembrar de uma racicionio que estava a seguir
-  public FileManagement(String path, String query){
-
-        this.path=path;
-        this.query=query;
-
+    /**
+     * Construtor genérico da classe vazio
+     */
+    public FileManagement(){
+        this.path = path;
     }
-    */
 
     /**
+     * Getter genérico da variavel path
+     * @return
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * Setter genérico do path
+     * @param path caminho para tratamento dos ficheiros a realizar
+     */
+    public void setPath(String path) { this.path=path; }
+
+    //  Está aqui para me lembrar de uma racicionio que estava a seguir
+    //(tambem percebi o teu raciocinio. se queres fazer uma classe pa query tens de fazer assim
+    //se nao nao consegues instt
+    public FileManagement(String path, QueryManagement query) {
+
+        this.path = path;
+        this.query = query;
+
+    }
+
+    /**
+
      * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
      * LF-01.L2 + LF-01.L1
      */
@@ -39,6 +69,7 @@ public class FileManagement {
         FilenameFilter textFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".txt");
+
             }
         };
 
@@ -49,6 +80,36 @@ public class FileManagement {
         return dirfiles;
     }
 
+  /** @return Retorna o caminho que está a ser utilizado
+     * @throws IOException
+     */
+    public String getCurrentDirectory() throws IOException {
+        return new File(path).getCanonicalPath();
+    }
+
+  
+   /**
+     * Verifica o numero de ficheiros que existe dentro do directório
+     * @return um numero inteiro com a quantidade de ficheiros existentes na pasta
+     */
+    public int getFileNumber() {
+        return new File(path).list().length;
+    }
+  
+    /**
+     * Verifica o array do dirfiles e verifica os nomes existentes
+     * @return Retorna uma lista com os nomes existentes na pasta
+     */
+   public ArrayList<String> getFilesName() {
+        ArrayList<String> output = new ArrayList<>();
+
+        for (int i = 0; i < this.dirfiles.length; i++) {
+            output.add(dirfiles[i].getName());
+        }
+
+        return output;
+    }
+  
     public String[] getFileString(){
 
         String[] dirfilestring = new String[dirfiles.length];
@@ -64,8 +125,7 @@ public class FileManagement {
         File dirpath = new File(path);
         FilenameFilter textFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".tmp");
-            }
+                return name.toLowerCase().endsWith(".tmp");  }
         };
 
         File[] files = dirpath.listFiles(textFilter);
@@ -113,6 +173,7 @@ public class FileManagement {
         boolean checker=true;
 
         for (int ix = 0; ix < filecounter; ix++) {
+
             content = new ArrayList<String>();
 
             try {
@@ -121,11 +182,13 @@ public class FileManagement {
                 while ((line = br.readLine()) != null) {
                     content.add(line.replaceAll("[^\\p{L} ]", ""));
                 }
+
                 boolean work=createTempfile(content, this.dirfiles[ix].getName());
                 if(work==true&&checker==true){
                     checker=true;
                 }else{
                     checker=false;
+
                 }
 
             } catch (IOException e) {
@@ -143,13 +206,6 @@ public class FileManagement {
     }
 
 
-
-
-    /** LF-01.2
-     *  Procura entre os ficheiros temporários pela query do utilizador. Guarda as repetições em Matriz de Inteiros, a chamada Matriz de
-     *  de equivalência.
-     * @return a matriz de equivalência
-     */
     public int[][] queryFile() {
 
         QueryManagement queryManagement = new QueryManagement();
@@ -167,8 +223,10 @@ public class FileManagement {
                     for (int i = 0; i < query.size(); i++) {
                         int lastindex = 0;
                         if (line.contains(query.get(i))) {
+
                             while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex!=-1) {
                                 matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
+
                                 lastindex++;
 
                             }
@@ -199,5 +257,14 @@ public class FileManagement {
     public void setQuerycounter(int querycounter) {
         this.querycounter = querycounter;
     }
+
+    public void SortedResult(ArrayList<FileManagement> lista, int maxFiles){
+        ArrayList<FileManagement> output = new ArrayList();
+        for(int i = 0;i<lista.size();i++){
+
+        }
+    }
+
+
 }
 
