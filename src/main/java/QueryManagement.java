@@ -20,7 +20,7 @@ public class QueryManagement {
         return query;
     }
 
-    //Não sei se assim funcionará direito, mas depois vê-se. Diz-me o que achares!
+    //Não sei se assim funcionará direito, mas depois vê-se. Diz-me o que achares! Mas acho que está
     public void trimQuery(){
 
         for(String w:query.split("\\s",0))

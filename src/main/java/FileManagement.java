@@ -33,17 +33,20 @@ public class FileManagement {
      * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
      * LF-01.L2 + LF-01.L1
      */
-    private void setFiles() {
+    private File[] setFiles() {
         File dirpath = new File(path);
 
-        dirfiles = dirpath.listFiles((dir, name) -> {
-            if (name.toLowerCase().endsWith(".txt")) {
-                return new File(dir, name).isFile();
-            } else {
-                return false;
+        FilenameFilter textFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".txt");
             }
-        });
-        filecounter = dirfiles.length;
+        };
+
+        File[] files = dirpath.listFiles(textFilter);
+
+        dirfiles=files;
+        filecounter=dirfiles.length;
+        return dirfiles;
     }
 
     public String[] getFileString(){
@@ -57,24 +60,25 @@ public class FileManagement {
     /**
      * Vai buscar os ficheiros temporários criados, com a informação organizada
      */
-    private void setTempFiles() {
+    private File[] setTempFiles() {
         File dirpath = new File(path);
-
-        dirTempfiles = dirpath.listFiles((dir, name) -> {
-            if (name.toLowerCase().endsWith(".tmp")) {
-                return new File(dir, name).isFile();
-            } else {
-                return false;
+        FilenameFilter textFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".tmp");
             }
-        });
+        };
 
+        File[] files = dirpath.listFiles(textFilter);
+        dirTempfiles=files;
+        return dirTempfiles;
     }
 
     /** LF-01.1.A
      * @param content ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
      * @param filename Nome do ficheiro de onde a informação foi lida. Passará para o ficheiro temporário.
+     * @return sucesso (ou não) do método
      */
-    public void createTempfile(ArrayList<String> content, String filename) {
+    public boolean createTempfile(ArrayList<String> content, String filename) {
 
         try {
             File temp = File.createTempFile(filename + "temp", ".tmp");
@@ -84,24 +88,28 @@ public class FileManagement {
                 bw.write(string);
 
             bw.close();
+            return true;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
 
     }
 
     /**
-     * LF-01 + LF-01.1 + Implemetação LF-01.1.A
-     *   Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     *  LF-01 + LF-01.1 + Implemetação LF-01.1.A
+     *  Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     * @return se a operação de criação de ficheiros temporários foi bem sucecida
      */
-
-    public void fileReader() {
+    public boolean fileReader() {
 
         String line;
         ArrayList<String> content;
         setFiles();
-        for (int ix = 0; ix < this.dirfiles.length; ix++) {
+
+        boolean checker=true;
+
+        for (int ix = 0; ix < filecounter; ix++) {
             content = new ArrayList<String>();
 
             try {
@@ -110,13 +118,23 @@ public class FileManagement {
                 while ((line = br.readLine()) != null) {
                     content.add(line.replaceAll("[^\\p{L} ]", ""));
                 }
-
-                createTempfile(content, this.dirfiles[ix].getName());
+                boolean work=createTempfile(content, this.dirfiles[ix].getName());
+                if(work==true&&checker==true){
+                    checker=true;
+                }else{
+                    checker=false;
+                }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
 
+        }
+
+        if(checker==true){
+            return checker;
+        }else{
+            return checker;
         }
 
     }
@@ -127,14 +145,15 @@ public class FileManagement {
     /** LF-01.2
      *  Procura entre os ficheiros temporários pela query do utilizador. Guarda as repetições em Matriz de Inteiros, a chamada Matriz de
      *  de equivalência.
+     * @return a matriz de equivalência
      */
-    public void queryFile() {
+    public int[][] queryFile() {
 
         QueryManagement queryManagement = new QueryManagement();
         ArrayList<String> query = new ArrayList<String>(queryManagement.getTrimmedquery());
         setQuerycounter(query.size());
         setTempFiles();
-        matrixequivalencia = new int[this.dirTempfiles.length][query.size()];
+        matrixequivalencia = new int[filecounter][query.size()];
 
         for (int ix = 0; ix < this.dirTempfiles.length; ix++) {
             String line;
@@ -145,20 +164,25 @@ public class FileManagement {
                     for (int i = 0; i < query.size(); i++) {
                         int lastindex = 0;
                         if (line.contains(query.get(i))) {
-                            while ((lastindex = line.indexOf(query.get(1), lastindex)) <= query.size()) {
+                            while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex!=-1) {
                                 matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
                                 lastindex++;
+
                             }
                         }
                     }
                 }
-                br.close();
+
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                return null;
             } catch (IOException e) {
-                e.printStackTrace();
+                return null;
+
             }
         }
+
+        return matrixequivalencia;
+
     }
 
     public int getQuerycounter() {
@@ -172,7 +196,5 @@ public class FileManagement {
     public void setQuerycounter(int querycounter) {
         this.querycounter = querycounter;
     }
-
-
 }
 
