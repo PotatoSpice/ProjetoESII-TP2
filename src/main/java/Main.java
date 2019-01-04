@@ -2,7 +2,7 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //Vou colocar aqui só para ficar já
 
@@ -24,13 +24,8 @@ public class Main {
         FileManagement fileManagement = new FileManagement(inputManager.getPath());
     */
 
-        FileManagement f = new FileManagement();
+        QueryManagement q = new QueryManagement("test de trimm da query");
+        System.out.println(q.getQuery());
 
-        try {
-            System.out.println(f.getCurrentDirectory());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
-
 }

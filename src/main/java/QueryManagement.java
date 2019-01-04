@@ -39,9 +39,7 @@ public class QueryManagement {
      * Divide as palavras por cada espaço
      */
     public void trimQuery() {
-        while (query.trim().split("\\s+") != null)
             this.trimmedquery.add(String.valueOf(query.trim().split("\\s+")));
-
     }
 
     /**
