@@ -80,14 +80,17 @@ public class FileManagement {
      */
     public boolean createTempfile(ArrayList<String> content, String filename) {
 
+        File directory= new File(path);
+
         try {
-            File temp = File.createTempFile(filename + "temp", ".tmp");
+            File temp = File.createTempFile(filename + "temp", ".tmp", directory);
             temp.deleteOnExit(); //como a função bem diz, quando o programa terminar, apaga os ficheiros temporários
             BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
             for (String string : content)
                 bw.write(string);
 
             bw.close();
+
             return true;
 
         } catch (IOException e) {
