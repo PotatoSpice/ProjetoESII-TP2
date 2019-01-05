@@ -5,22 +5,18 @@ import java.io.FileReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
 
     private int filecounter; //colunas da matriz
     private int querycounter; //linhas da matriz
-    private String path = "files/";
+    private String path = "files";
     private File[] dirfiles;
     private File[] dirTempfiles;
     private int[][] matrixequivalencia;
 
-    public int[][] getMatrixequivalencia() {
-
-        return this.matrixequivalencia;
-
-    }
 
     public FileManagement(String path) {
 
@@ -30,12 +26,13 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     /**
      * Construtor genérico da classe vazio
      */
-    public FileManagement(){
+    public FileManagement() {
         this.path = path;
     }
 
     /**
      * Getter genérico da variavel path
+     *
      * @return
      */
     public String getPath() {
@@ -44,22 +41,21 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
     /**
      * Setter genérico do path
+     *
      * @param path caminho para tratamento dos ficheiros a realizar
      */
-    public void setPath(String path) { this.path=path; }
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     //  Está aqui para me lembrar de uma racicionio que estava a seguir
     //(tambem percebi o teu raciocinio. se queres fazer uma classe pa query tens de fazer assim
     //se nao nao consegues instt
     public FileManagement(String path, QueryManagement query) {
-
         this.path = path;
-        this.query = query;
-
     }
 
     /**
-
      * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
      * LF-01.L2 + LF-01.L1
      */
@@ -75,46 +71,47 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
         File[] files = dirpath.listFiles(textFilter);
 
-        dirfiles=files;
-        filecounter=dirfiles.length;
+        dirfiles = files;
+        filecounter = dirfiles.length;
         return dirfiles;
     }
 
-  /** @return Retorna o caminho que está a ser utilizado
+    /**
+     * @return Retorna o caminho que está a ser utilizado
      * @throws IOException
      */
     public String getCurrentDirectory() throws IOException {
         return new File(path).getCanonicalPath();
     }
 
-  
-   /**
+
+    /**
      * Verifica o numero de ficheiros que existe dentro do directório
+     *
      * @return um numero inteiro com a quantidade de ficheiros existentes na pasta
      */
     public int getFileNumber() {
         return new File(path).list().length;
     }
-  
+
     /**
      * Verifica o array do dirfiles e verifica os nomes existentes
+     *
      * @return Retorna uma lista com os nomes existentes na pasta
      */
-   public ArrayList<String> getFilesName() {
-        ArrayList<String> output = new ArrayList<>();
+    public ArrayList<String> getFilesName() {
 
-        for (int i = 0; i < this.dirfiles.length; i++) {
-            output.add(dirfiles[i].getName());
-        }
+        String[] f = new File(path).list();
+        List n = Arrays.asList(f);
 
-        return output;
+        return new ArrayList<String>(n);
     }
-  
-    public String[] getFileString(){
+
+    public String[] getFileString() {
 
         String[] dirfilestring = new String[dirfiles.length];
-        for(int ix=0; ix<dirfiles.length; ix++)
-            dirfilestring[ix]=dirfiles[ix].toString();
+        for (int ix = 0; ix < dirfiles.length; ix++)
+            dirfilestring[ix] = dirfiles[ix].toString();
         return dirfilestring;
     }
 
@@ -125,22 +122,25 @@ public class FileManagement<T> implements FileManagementInterface<T> {
         File dirpath = new File(path);
         FilenameFilter textFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".tmp");  }
+                return name.toLowerCase().endsWith(".tmp");
+            }
         };
 
         File[] files = dirpath.listFiles(textFilter);
-        dirTempfiles=files;
+        dirTempfiles = files;
         return dirTempfiles;
     }
 
-    /** LF-01.1.A
-     * @param content ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
+    /**
+     * LF-01.1.A
+     *
+     * @param content  ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
      * @param filename Nome do ficheiro de onde a informação foi lida. Passará para o ficheiro temporário.
      * @return sucesso (ou não) do método
      */
     public boolean createTempfile(ArrayList<String> content, String filename) {
 
-        File directory= new File(path);
+        File directory = new File(path);
 
         try {
             File temp = File.createTempFile(filename + "temp", ".tmp", directory);
@@ -160,8 +160,9 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     }
 
     /**
-     *  LF-01 + LF-01.1 + Implemetação LF-01.1.A
-     *  Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     * LF-01 + LF-01.1 + Implemetação LF-01.1.A
+     * Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     *
      * @return se a operação de criação de ficheiros temporários foi bem sucecida
      */
     public boolean fileReader() {
@@ -170,7 +171,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
         ArrayList<String> content;
         setFiles();
 
-        boolean checker=true;
+        boolean checker = true;
 
         for (int ix = 0; ix < filecounter; ix++) {
 
@@ -183,11 +184,11 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                     content.add(line.replaceAll("[^\\p{L} ]", ""));
                 }
 
-                boolean work=createTempfile(content, this.dirfiles[ix].getName());
-                if(work==true&&checker==true){
-                    checker=true;
-                }else{
-                    checker=false;
+                boolean work = createTempfile(content, this.dirfiles[ix].getName());
+                if (work == true && checker == true) {
+                    checker = true;
+                } else {
+                    checker = false;
 
                 }
 
@@ -197,9 +198,9 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
         }
 
-        if(checker==true){
+        if (checker == true) {
             return checker;
-        }else{
+        } else {
             return checker;
         }
 
@@ -224,7 +225,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                         int lastindex = 0;
                         if (line.contains(query.get(i))) {
 
-                            while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex!=-1) {
+                            while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex != -1) {
                                 matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
 
                                 lastindex++;
@@ -258,13 +259,11 @@ public class FileManagement<T> implements FileManagementInterface<T> {
         this.querycounter = querycounter;
     }
 
-    public void SortedResult(ArrayList<FileManagement> lista, int maxFiles){
-        ArrayList<FileManagement> output = new ArrayList();
-        for(int i = 0;i<lista.size();i++){
+    public int[][] getMatrixequivalencia() {
 
-        }
+        return this.matrixequivalencia;
+
     }
-
 
 }
 

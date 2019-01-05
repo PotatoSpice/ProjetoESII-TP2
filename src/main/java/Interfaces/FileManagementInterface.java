@@ -11,6 +11,6 @@ public interface FileManagementInterface<T> {
 
     public ArrayList<String> getFilesName();
 
-    public void fileReader();
+    public boolean fileReader();
 
 }
