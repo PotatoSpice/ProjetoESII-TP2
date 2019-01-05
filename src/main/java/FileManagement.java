@@ -8,17 +8,20 @@ import java.util.Arrays;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
+
+    private int filecounter; //colunas da matriz
+    private int querycounter; //linhas da matriz
     private String path = "files/";
-    private QueryManagement query;
     private File[] dirfiles;
     private File[] dirTempfiles;
-    private int[][] matrixEquivalencia;
+    private int[][] matrixequivalencia;
 
+    public int[][] getMatrixequivalencia() {
 
-    /**
-     * Construtor genérico da classe FileManagement com redifinição do path
-     * @param path
-     */
+        return this.matrixequivalencia;
+
+    }
+
     public FileManagement(String path) {
 
         this.path = path;
@@ -43,10 +46,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      * Setter genérico do path
      * @param path caminho para tratamento dos ficheiros a realizar
      */
-    public void setPath(String path) {
-
-        this.path = path;
-    }
+    public void setPath(String path) { this.path=path; }
 
     //  Está aqui para me lembrar de uma racicionio que estava a seguir
     //(tambem percebi o teu raciocinio. se queres fazer uma classe pa query tens de fazer assim
@@ -59,26 +59,48 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     }
 
     /**
-     * @return Retorna o caminho que está a ser utilizado
+
+     * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
+     * LF-01.L2 + LF-01.L1
+     */
+    private File[] setFiles() {
+        File dirpath = new File(path);
+
+        FilenameFilter textFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".txt");
+
+            }
+        };
+
+        File[] files = dirpath.listFiles(textFilter);
+
+        dirfiles=files;
+        filecounter=dirfiles.length;
+        return dirfiles;
+    }
+
+  /** @return Retorna o caminho que está a ser utilizado
      * @throws IOException
      */
     public String getCurrentDirectory() throws IOException {
         return new File(path).getCanonicalPath();
     }
 
-    /**
+  
+   /**
      * Verifica o numero de ficheiros que existe dentro do directório
      * @return um numero inteiro com a quantidade de ficheiros existentes na pasta
      */
     public int getFileNumber() {
         return new File(path).list().length;
     }
-
+  
     /**
      * Verifica o array do dirfiles e verifica os nomes existentes
      * @return Retorna uma lista com os nomes existentes na pasta
      */
-    public ArrayList<String> getFilesName() {
+   public ArrayList<String> getFilesName() {
         ArrayList<String> output = new ArrayList<>();
 
         for (int i = 0; i < this.dirfiles.length; i++) {
@@ -87,46 +109,71 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
         return output;
     }
+  
+    public String[] getFileString(){
+
+        String[] dirfilestring = new String[dirfiles.length];
+        for(int ix=0; ix<dirfiles.length; ix++)
+            dirfilestring[ix]=dirfiles[ix].toString();
+        return dirfilestring;
+    }
 
     /**
-     *
+     * Vai buscar os ficheiros temporários criados, com a informação organizada
      */
-    private void setFiles() {
+    private File[] setTempFiles() {
         File dirpath = new File(path);
+        FilenameFilter textFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".tmp");  }
+        };
 
-        this.dirfiles = dirpath.listFiles((dir, name) -> {
-            if (name.toLowerCase().endsWith(".txt")) {
-                return new File(dir, name).isFile();
-            } else {
-                return false;
-            }
-        });
+        File[] files = dirpath.listFiles(textFilter);
+        dirTempfiles=files;
+        return dirTempfiles;
+    }
+
+    /** LF-01.1.A
+     * @param content ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
+     * @param filename Nome do ficheiro de onde a informação foi lida. Passará para o ficheiro temporário.
+     * @return sucesso (ou não) do método
+     */
+    public boolean createTempfile(ArrayList<String> content, String filename) {
+
+        File directory= new File(path);
+
+        try {
+            File temp = File.createTempFile(filename + "temp", ".tmp", directory);
+            temp.deleteOnExit(); //como a função bem diz, quando o programa terminar, apaga os ficheiros temporários
+            BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
+            for (String string : content)
+                bw.write(string);
+
+            bw.close();
+
+            return true;
+
+        } catch (IOException e) {
+            return false;
+        }
 
     }
 
-    private void setTempFiles() {
-        File dirpath = new File(path);
-
-        dirTempfiles = dirpath.listFiles((dir, name) -> {
-            if (name.toLowerCase().endsWith(".tmp")) {
-                return new File(dir, name).isFile();
-            } else {
-                return false;
-            }
-        });
-
-    }
-
-
     /**
-     * Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação;
+     *  LF-01 + LF-01.1 + Implemetação LF-01.1.A
+     *  Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     * @return se a operação de criação de ficheiros temporários foi bem sucecida
      */
-    public void fileReader() {
+    public boolean fileReader() {
 
         String line;
         ArrayList<String> content;
-        this.setFiles();
-        for (int ix = 0; ix < this.dirfiles.length; ix++) {
+        setFiles();
+
+        boolean checker=true;
+
+        for (int ix = 0; ix < filecounter; ix++) {
+
             content = new ArrayList<String>();
 
             try {
@@ -136,38 +183,36 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                     content.add(line.replaceAll("[^\\p{L} ]", ""));
                 }
 
-                try {
-                    File temp = File.createTempFile(this.dirfiles[ix].getName() + "temp", ".tmp");
-                    temp.deleteOnExit();
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-                    for (String string : content)
-                        bw.write(string);
+                boolean work=createTempfile(content, this.dirfiles[ix].getName());
+                if(work==true&&checker==true){
+                    checker=true;
+                }else{
+                    checker=false;
 
-                    bw.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
 
+        }
+
+        if(checker==true){
+            return checker;
+        }else{
+            return checker;
         }
 
     }
 
 
-    /**
-     * Procura entre os ficheiros temporários pela query do utilizador.
-     * Guarda as repetições em Array de Inteiros.
-     */
-    public void queryFile() {
+    public int[][] queryFile() {
 
         QueryManagement queryManagement = new QueryManagement();
         ArrayList<String> query = new ArrayList<String>(queryManagement.getTrimmedquery());
+        setQuerycounter(query.size());
         setTempFiles();
-        matrixEquivalencia = new int[this.dirTempfiles.length][query.size()];
+        matrixequivalencia = new int[filecounter][query.size()];
 
         for (int ix = 0; ix < this.dirTempfiles.length; ix++) {
             String line;
@@ -178,20 +223,39 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                     for (int i = 0; i < query.size(); i++) {
                         int lastindex = 0;
                         if (line.contains(query.get(i))) {
-                            while ((lastindex = line.indexOf(query.get(1), lastindex)) <= query.size()) {
-                                matrixEquivalencia[ix][i] = matrixEquivalencia[ix][i] + 1;
+
+                            while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex!=-1) {
+                                matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
+
                                 lastindex++;
+
                             }
                         }
                     }
                 }
-                br.close();
+
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                return null;
             } catch (IOException e) {
-                e.printStackTrace();
+                return null;
+
             }
         }
+
+        return matrixequivalencia;
+
+    }
+
+    public int getQuerycounter() {
+        return querycounter;
+    }
+
+    public int getFilecounter() {
+        return filecounter;
+    }
+
+    public void setQuerycounter(int querycounter) {
+        this.querycounter = querycounter;
     }
 
     public void SortedResult(ArrayList<FileManagement> lista, int maxFiles){
@@ -201,4 +265,6 @@ public class FileManagement<T> implements FileManagementInterface<T> {
         }
     }
 
+
 }
+

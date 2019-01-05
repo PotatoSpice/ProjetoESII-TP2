@@ -12,13 +12,15 @@ public class QueryManagement {
 
     }
 
-    /**
+   /**
      * Construtor genérico que aceita uma query
      *
      * @param query
      */
     public QueryManagement(String query) {
         this.query = query;
+        trimQuery();
+
     }
 
     //Possívelmente é desnecessário, mas fica para já!
@@ -39,7 +41,10 @@ public class QueryManagement {
      * Divide as palavras por cada espaço
      */
     public void trimQuery() {
-            this.trimmedquery.add(String.valueOf(query.trim().split("\\s+")));
+        
+        for(String w:query.split("\\s",0))
+            this.trimmedquery.add(w);
+
     }
 
     /**
