@@ -25,8 +25,11 @@ public class Main {
         FileManagement fileManagement = new FileManagement(inputManager.getPath());
     */
 
-        FileManagement f = new FileManagement("fadsfasdfas");
-        System.out.println(f.getCurrentDirectory());
+        FileManagement f = new FileManagement();
+        QueryManagement q = new QueryManagement("ceu azul");
+        q.trimQuery();
+        f.fileReader();
+        f.queryFile();
 
     }
 }

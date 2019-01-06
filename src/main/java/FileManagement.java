@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
@@ -81,7 +82,15 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      * @throws IOException
      */
     public String getCurrentDirectory() throws IOException {
-        return new File(path).getCanonicalPath();
+
+        File test = new File(path);
+        String dir;
+        if(test.isDirectory())
+            dir = test.getCanonicalPath();
+        else
+            throw new IOException("A pasta não existe!");
+
+        return dir;
     }
 
 
@@ -91,7 +100,15 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      * @return um numero inteiro com a quantidade de ficheiros existentes na pasta
      */
     public int getFileNumber() {
-        return new File(path).list().length;
+
+        File dirct = new File(path);
+
+        if (dirct.isDirectory()) {
+            if (dirct.list().length > 0)
+                return dirct.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt")).length;
+        }
+
+        return 0;
     }
 
     /**
@@ -101,12 +118,20 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public ArrayList<String> getFilesName() {
 
-        String[] f = new File(path).list();
-        List n = Arrays.asList(f);
 
-        return new ArrayList<String>(n);
+        File[] f = new File(path).listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        ArrayList<String> n = new ArrayList<String>();
+
+        for (int i = 0; i < f.length; i++) {
+            n.add(f[i].getName());
+        }
+
+        return n;
     }
 
+    /**
+     * @return um array de strings com os nomes dos ficheiros armazenados no arrays dirFiles
+     */
     public String[] getFileString() {
 
         String[] dirfilestring = new String[dirfiles.length];
@@ -117,6 +142,8 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
     /**
      * Vai buscar os ficheiros temporários criados, com a informação organizada
+     *
+     * @return um array de Files com os ficheiros temporarios limpos de caracteres especiais e numeros
      */
     private File[] setTempFiles() {
         File dirpath = new File(path);
@@ -206,7 +233,11 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
     }
 
-
+    /**
+     * Pesquiza nos ficheiros pelas palavras nas queries
+     *
+     * @return uma matriz preenchida com a similiariedade da query com o ficheiro
+     */
     public int[][] queryFile() {
 
         QueryManagement queryManagement = new QueryManagement();
@@ -247,18 +278,36 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
     }
 
+    /**
+     * Getter de querycounter
+     *
+     * @return
+     */
     public int getQuerycounter() {
         return querycounter;
     }
 
+    /**
+     * Getter filecounter
+     *
+     * @return numero de colunas da matrix de equivalencias
+     */
     public int getFilecounter() {
         return filecounter;
     }
 
+    /**
+     * Setter de querycounter
+     *
+     * @param querycounter tamanho das linhas da matriz de equivalencia
+     */
     public void setQuerycounter(int querycounter) {
         this.querycounter = querycounter;
     }
 
+    /**
+     * @return
+     */
     public int[][] getMatrixequivalencia() {
 
         return this.matrixequivalencia;
