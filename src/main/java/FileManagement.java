@@ -135,8 +135,10 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     public String[] getFileString() {
 
         String[] dirfilestring = new String[dirfiles.length];
-        for (int ix = 0; ix < dirfiles.length; ix++)
-            dirfilestring[ix] = dirfiles[ix].toString();
+        if(this.dirfiles.length > 0) {
+            for (int ix = 0; ix < dirfiles.length; ix++)
+                dirfilestring[ix] = dirfiles[ix].toString();
+        }
         return dirfilestring;
     }
 

@@ -2,7 +2,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 
 class QueryManagementTest {
@@ -15,32 +14,39 @@ class QueryManagementTest {
     }
 
     @Test
-    public void getQueryValidtest_ECP1() {
-        assertEquals("query de teste", q.getQuery(), "A query não é igual!!");
+    public void EmptyQuerytest_QM1() {
+        assertTrue(q.getQuery().length() > 0, "A query não pode estar vazia");
     }
 
     @Test
-    public void EmptyQuerytest_ECP2(){
-        assertTrue(q.getQuery().length() > 0,"A query não pode estar vazia");
-    }
-
-    @Test
-    public void trimmedQueryLengthtest_ECP1() {
+    public void trimmedQueryLengthtest_QM4() {
         assertEquals(3, q.getTrimmedquery().size(), "O tamanho nao coincide");
     }
 
     @Test
-    public void EmptytrimmedQuerytest_ECP1() {
+    public void EmptytrimmedQuerytest_QM3() {
         assertNotEquals(0, q.getTrimmedquery().size(), "A trimmedQuery nao devia estar vazia");
     }
 
     @Test
-    public void trimQueryValidtest_ECP2() {
+    public void EmptyQueryTrimmedtest_QM5() {
+        QueryManagement q1 = new QueryManagement("");
+        assertTrue(q1.getTrimmedquery().isEmpty());
+    }
+
+    @Test
+    public void nullQueryTrimmedtest_QM6() {
+        QueryManagement q1 = new QueryManagement();
+        assertTrue(q1.getTrimmedquery().isEmpty());
+    }
+
+    @Test
+    public void trimQueryValidtest_QM2() {
         assertEquals(Arrays.asList("query", "de", "teste"), q.getTrimmedquery(), "A Query nao ta devidamente distribuida pelo arrayList");
     }
 
     @Test
-    public void trimmedQuerySizetest(){
+    public void trimmedQuerySizetest_QM7() {
         assertTrue(q.getTrimmedquery().size() < 4);
     }
 }
