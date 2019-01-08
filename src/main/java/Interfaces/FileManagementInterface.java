@@ -3,6 +3,7 @@ package Interfaces;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public interface FileManagementInterface<T> {
 
     public String getCurrentDirectory() throws IOException;
@@ -11,6 +12,6 @@ public interface FileManagementInterface<T> {
 
     public ArrayList<String> getFilesName();
 
-    public void fileReader();
+    public boolean fileReader();
 
 }

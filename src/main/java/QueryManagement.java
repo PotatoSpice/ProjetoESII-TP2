@@ -3,22 +3,23 @@ import java.util.ArrayList;
 public class QueryManagement {
 
     private String query;
-    private ArrayList<String> trimmedquery = new ArrayList<>();
+    private ArrayList<String> trimmedquery;
 
     /**
      * Construtor genérioc da classe QueryManagement
      */
     public QueryManagement() {
-
+        this.trimmedquery = new ArrayList<>();
     }
 
-   /**
+    /**
      * Construtor genérico que aceita uma query
      *
      * @param query
      */
     public QueryManagement(String query) {
         this.query = query;
+        this.trimmedquery = new ArrayList<>();
         trimQuery();
 
     }
@@ -41,8 +42,9 @@ public class QueryManagement {
      * Divide as palavras por cada espaço
      */
     public void trimQuery() {
-        
-        for(String w:query.split("\\s",0))
+
+
+        for (String w : query.split("\\s", 0))
             this.trimmedquery.add(w);
 
     }

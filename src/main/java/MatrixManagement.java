@@ -1,18 +1,23 @@
 public class MatrixManagement {
 
-    //Construtor da classe
-    public MatrixManagement(FileManagement fileManagement){
-        matrizlocal(fileManagement);
-    }
-
-    private double[][]matrizcalculada;
+    private double[][] matrizcalculada;
     private double[] grausemelhanca;
-
     int[][] matrizlocal;
     int columns; //documentos
     int rows; //palavras
-
     private int[] ocurrencias;
+
+
+    /**
+     * Construtor da classe MatrixManagement
+     * @param fileManagement Estrutra fileManagement com os parametros a copiar
+     */
+    public MatrixManagement(FileManagement fileManagement){
+        matrizlocal = fileManagement.getMatrixequivalencia();
+        columns = fileManagement.getFilecounter();
+        rows = fileManagement.getQuerycounter();
+        this.grausemelhanca = new double[this.columns];
+    }
 
     /**
      * Define os cálculos da Matriz como requiridos no requisito LF-01.2.C
@@ -21,7 +26,7 @@ public class MatrixManagement {
         occurrences();
         for(int ix=0; ix<columns; ix++){
             for(int i2=0; i2<rows; i2++){
-                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*Math.log10(columns/ocurrencias[i2]);
+                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*1+Math.log10(columns/ocurrencias[i2]);
             }
         }
         return matrizcalculada;
@@ -48,24 +53,11 @@ public class MatrixManagement {
     }
 
     /**
-     * Esta função vai buscar os dados da matriz dos documentos e passa para esta classe. Chama-se no construtor.
-     * Não existe em requisito, mas é fundamental para a correta utilização desta classe.
-     * @param fileManagement instância do FileManagement criado no Main
-     */
-    public void matrizlocal(FileManagement fileManagement){
-        matrizlocal = fileManagement.getMatrixequivalencia();
-        columns = fileManagement.getFilecounter();
-        rows = fileManagement.getQuerycounter();
-    }
-
-    /**
      * Referente ao requisito Calculos-01
      *
      * ISSUE:Problemas na interpretação da fórmula. Esclarecer problemas. Fórmula errada ou incompleta.
      */
     public double[] grauSemelhanca(){
-        grausemelhanca=new double[columns];
-
         for(int ix=0; ix<columns; ix++){
             for (int i2=0; i2<rows;i2++){
                 grausemelhanca[ix]=(matrizcalculada[ix][i2]*ocurrencias[i2])/(Math.sqrt(matrizcalculada[ix][i2]*matrizcalculada[ix][i2]))*(Math.sqrt(ocurrencias[i2]^2));
