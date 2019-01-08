@@ -17,6 +17,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     private File[] dirfiles;
     private File[] dirTempfiles;
     private int[][] matrixequivalencia;
+    QueryManagement query;
 
 
     public FileManagement(String path) {
@@ -29,6 +30,10 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public FileManagement() {
         this.path = path;
+    }
+
+    public FileManagement(QueryManagement query) {
+        this.query = query;
     }
 
     /**
@@ -52,9 +57,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     //  Está aqui para me lembrar de uma racicionio que estava a seguir
     //(tambem percebi o teu raciocinio. se queres fazer uma classe pa query tens de fazer assim
     //se nao nao consegues instt
-    public FileManagement(String path, QueryManagement query) {
-        this.path = path;
-    }
+
 
     /**
      * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
@@ -63,16 +66,9 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     private File[] setFiles() {
         File dirpath = new File(path);
 
-        FilenameFilter textFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".txt");
+        FilenameFilter textFilter = (dir, name) -> name.toLowerCase().endsWith(".txt");
 
-            }
-        };
-
-        File[] files = dirpath.listFiles(textFilter);
-
-        dirfiles = files;
+        dirfiles = dirpath.listFiles(textFilter);
         filecounter = dirfiles.length;
         return dirfiles;
     }
@@ -85,7 +81,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
         File test = new File(path);
         String dir;
-        if(test.isDirectory())
+        if (test.isDirectory())
             dir = test.getCanonicalPath();
         else
             throw new IOException("A pasta não existe!");
@@ -135,7 +131,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     public String[] getFileString() {
 
         String[] dirfilestring = new String[dirfiles.length];
-        if(this.dirfiles.length > 0) {
+        if (this.dirfiles.length > 0) {
             for (int ix = 0; ix < dirfiles.length; ix++)
                 dirfilestring[ix] = dirfiles[ix].toString();
         }
@@ -155,8 +151,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
             }
         };
 
-        File[] files = dirpath.listFiles(textFilter);
-        dirTempfiles = files;
+        dirTempfiles = dirpath.listFiles(textFilter);
         return dirTempfiles;
     }
 
@@ -173,13 +168,13 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
         try {
             File temp = File.createTempFile(filename + "temp", ".tmp", directory);
-            temp.deleteOnExit(); //como a função bem diz, quando o programa terminar, apaga os ficheiros temporários
+
             BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
             for (String string : content)
                 bw.write(string);
 
             bw.close();
-
+            temp.deleteOnExit(); //como a função bem diz, quando o programa terminar, apaga os ficheiros temporários
             return true;
 
         } catch (IOException e) {
@@ -242,11 +237,9 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public int[][] queryFile() {
 
-        QueryManagement queryManagement = new QueryManagement();
-        ArrayList<String> query = new ArrayList<String>(queryManagement.getTrimmedquery());
-        setQuerycounter(query.size());
+        setQuerycounter(query.getTrimmedquery().size());
         setTempFiles();
-        matrixequivalencia = new int[filecounter][query.size()];
+        matrixequivalencia = new int[filecounter][query.getTrimmedquery().size()];
 
         for (int ix = 0; ix < this.dirTempfiles.length; ix++) {
             String line;
@@ -254,11 +247,11 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                 BufferedReader br = new BufferedReader(new FileReader(this.dirTempfiles[ix]));
 
                 while ((line = br.readLine()) != null) {
-                    for (int i = 0; i < query.size(); i++) {
+                    for (int i = 0; i < query.getTrimmedquery().size(); i++) {
                         int lastindex = 0;
-                        if (line.contains(query.get(i))) {
+                        if (line.contains(query.getTrimmedquery().get(i))) {
 
-                            while ((lastindex = line.indexOf(query.get(i), lastindex)) <= query.size() && lastindex != -1) {
+                            while ((lastindex = line.indexOf(query.getTrimmedquery().get(i), lastindex)) <= query.getTrimmedquery().size() && lastindex != -1) {
                                 matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
 
                                 lastindex++;

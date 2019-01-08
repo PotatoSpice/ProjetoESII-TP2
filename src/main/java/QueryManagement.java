@@ -3,13 +3,13 @@ import java.util.ArrayList;
 public class QueryManagement {
 
     private String query;
-    private ArrayList<String> trimmedquery = new ArrayList<>();
+    private ArrayList<String> trimmedquery;
 
     /**
      * Construtor genérioc da classe QueryManagement
      */
     public QueryManagement() {
-
+        this.trimmedquery = new ArrayList<>();
     }
 
     /**
@@ -19,6 +19,7 @@ public class QueryManagement {
      */
     public QueryManagement(String query) {
         this.query = query;
+        this.trimmedquery = new ArrayList<>();
         trimQuery();
 
     }
@@ -42,10 +43,10 @@ public class QueryManagement {
      */
     public void trimQuery() {
 
-        if (this.query.length() > 0) {
-            for (String w : query.split("\\s", 0))
-                this.trimmedquery.add(w);
-        }
+
+        for (String w : query.split("\\s", 0))
+            this.trimmedquery.add(w);
+
     }
 
     /**

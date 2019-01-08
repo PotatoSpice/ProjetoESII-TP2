@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -24,12 +25,28 @@ public class Main {
         QueryManagement queryManagement = new QueryManagement(inputManager.getQuery());
         FileManagement fileManagement = new FileManagement(inputManager.getPath());
     */
-
-        FileManagement f = new FileManagement();
-        QueryManagement q = new QueryManagement("ceu azul");
-        q.trimQuery();
+        QueryManagement q = new QueryManagement("query de teste");
+        FileManagement f = new FileManagement(q);
         f.fileReader();
         f.queryFile();
+
+        for (int[] x : f.getMatrixequivalencia())
+        {
+            for (int y : x)
+            {
+                System.out.print(y + "| ");
+            }
+            System.out.println();
+        }
+
+      //  System.out.println(f.getQuerycounter());
+       // System.out.println(f.getFilecounter());
+
+        MatrixManagement matriz = new MatrixManagement(f);
+
+        ListingManagement list = new ListingManagement(matriz, f);
+
+        System.out.println(list.listaCompleta());
 
     }
 }
