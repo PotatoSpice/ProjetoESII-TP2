@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
@@ -28,9 +29,8 @@ public class Main {
         QueryManagement q = new QueryManagement("query de teste");
         FileManagement f = new FileManagement(q);
         f.fileReader();
-        f.queryFile();
-
-        for (int[] x : f.getMatrixequivalencia())
+        q.getQuery();
+       /* for (int[] x : f.getMatrixequivalencia())
         {
             for (int y : x)
             {
@@ -46,7 +46,7 @@ public class Main {
 
         ListingManagement list = new ListingManagement(matriz, f);
 
-        System.out.println(list.listaCompleta());
-
+        System.out.println(matriz.getRows());
+    */
     }
 }

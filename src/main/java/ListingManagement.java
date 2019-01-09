@@ -24,7 +24,7 @@ public class ListingManagement<T> {
         arrayGraus = matrixManagement.getGrausemelhanca();
         arrayFicheiros = fileManagement.getFileString();
         max = arrayFicheiros.length;
-     //   maxcheck = arrayGraus.length;
+        maxcheck = arrayGraus.length;
         classificacao = new ArrayList<String>();
     }
 
@@ -38,7 +38,7 @@ public class ListingManagement<T> {
         classificacao = new ArrayList<String>();
 
         for (int ix = 0; ix < max; ix++)
-            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]);
+            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
 
 
         return classificacao;

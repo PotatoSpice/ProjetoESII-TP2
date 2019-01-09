@@ -2,11 +2,12 @@ import Interfaces.FileManagementInterface;
 
 import java.io.*;
 import java.io.FileReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
@@ -183,6 +184,12 @@ public class FileManagement<T> implements FileManagementInterface<T> {
 
     }
 
+    private String clearNumbersandChars(String content) throws IOException {
+        content = content.replaceAll("[^\\p{L} ]", "");
+        return content;
+    }
+
+
     /**
      * LF-01 + LF-01.1 + Implemetação LF-01.1.A
      * Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
@@ -191,6 +198,27 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public boolean fileReader() {
 
+        boolean checker = false;
+        setFiles();
+
+        try {
+            for (int i = 0; i < this.dirfiles.length; i++) {
+
+                Path newfile = Paths.get(this.dirfiles[i].toString());
+                Charset cset = StandardCharsets.UTF_8;
+
+                String content = new String(Files.readAllBytes(newfile), cset);
+                content = clearNumbersandChars(content);
+
+                Files.write(newfile, content.getBytes(cset));
+
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        /*
         String line;
         ArrayList<String> content;
         setFiles();
@@ -204,9 +232,7 @@ public class FileManagement<T> implements FileManagementInterface<T> {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(this.dirfiles[ix]));
 
-                while ((line = br.readLine()) != null) {
-                    content.add(line.replaceAll("[^\\p{L} ]", ""));
-                }
+                clearNumbersandChars(br, content);
 
                 boolean work = createTempfile(content, this.dirfiles[ix].getName());
                 if (work == true && checker == true) {
@@ -220,14 +246,10 @@ public class FileManagement<T> implements FileManagementInterface<T> {
                 return false;
             }
 
-        }
+        }*/
 
-        if (checker == true) {
-            return checker;
-        } else {
-            return checker;
-        }
 
+        return checker;
     }
 
     /**
