@@ -1,11 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 class FileManagementTest {
@@ -28,7 +24,7 @@ class FileManagementTest {
         f.setPath("dsdfsadfasf");
         assertThrows(IOException.class, () -> {
             f.getCurrentDirectory();
-        });
+        },"Devia ter mandado uma excepção");
     }
 
     @Test
@@ -40,14 +36,14 @@ class FileManagementTest {
     @Test
     public void getFileNumberEmptyFoldertest_FM4(){
         f.setPath("\\files\\vazia");
-        assertEquals(0,f.getFileNumber());
+        assertEquals(0,f.getFileNumber(),"Devia ter 0");
 
     }
 
     @Test
     public void getFileNumberInvalidfoldertest_FM5(){
         f.setPath("adsfdasdsd");
-        assertEquals(0,f.getFileNumber());
+        assertEquals(0,f.getFileNumber(),"Devia ter 0");
     }
 
     @Test
@@ -58,80 +54,44 @@ class FileManagementTest {
     @Test
     public void getFilesNamesInvalidFolder_FM7(){
         f.setPath("asdasdasd");
-        assertTrue(f.getFilesName().isEmpty());
+        assertTrue(f.getFilesName().isEmpty(),"A lista deveria tar vazia");
     }
 
     @Test
     public void getFilesNamEmptyFoldertest_FM8(){
         f.setPath("\\files\\vazia");
-        assertTrue(f.getFilesName().isEmpty());
-    }
-
-    @Test
-    public void createTempFiletestValid_FM9() {
-        ArrayList content = new ArrayList<>();
-
-        content.add("asdfdsf");
-        content.add("bncvnvcb");
-        content.add("fsd98f46d");
-
-        assertTrue(f.createTempfile(content, "testfile"));
-    }
-
-    @Test
-    public void createTempFileInvalidFoldertest_FM10() {
-        f.setPath("asdsfadffasd");
-        ArrayList content = new ArrayList();
-
-        content.add("asdfdsf");
-        content.add("bncvnvcb");
-        content.add("fsd98f46d");
-
-        assertFalse(f.createTempfile(content, ""));
-    }
-
-    @Test
-    public void createTempFileEmptyFoldertest_FM11(){
-        f.setPath("\\files\\vazia");
-        ArrayList content = new ArrayList();
-
-        content.add("asdfdsf");
-        content.add("bncvnvcb");
-        content.add("fsd98f46d");
-
-        assertFalse(f.createTempfile(content, ""));
-
+        assertTrue(f.getFilesName().isEmpty(),"A lista devia tar vazia");
     }
 
     @Test
     public void getFileStringValid_FM12(){
         f.fileReader();
-        assertArrayEquals(new String[]{f.getPath()+"\\ficheiro1.txt",f.getPath()+"\\ficheiro2.txt",f.getPath()+"\\ficheiro3.txt",f.getPath()+"\\ficheiro4.txt",f.getPath()+"\\ficheiro5.txt"},f.getFileString());
+        assertArrayEquals(new String[]{f.getPath()+"\\ficheiro1.txt",f.getPath()+"\\ficheiro2.txt",f.getPath()+"\\ficheiro3.txt",f.getPath()+"\\ficheiro4.txt",f.getPath()+"\\ficheiro5.txt"},f.getFileString(),"Os nomes dos ficheiros nao sao iguais");
     }
 
     @Test
     public void getFileStringInvalidFolder_FM13(){
-        f.setPath("asdsgsdgfd");
+        f.setPath("\\asdsgsdgfd");
         f.fileReader();
-        assertEquals(0,f.getFileString().length);
+        assertTrue(f.getFileString() == null,"Devia ter dado true (null)");
     }
 
     @Test
     public void getFileStringEmptyFolder_FM14(){
         f.setPath("\\files\\vazia");
         f.fileReader();
-        assertEquals(0,f.getFileString().length);
+        assertTrue(f.getFileString() == null,"Devia ter dado true (null)");
     }
 
     @Test
     public void fileReadertestValid_FM15() {
-        assertTrue(f.fileReader());
+        assertTrue(f.fileReader(),"Devia devolver true");
     }
 
     @Test
     public void fileReaderNofile_FM16(){
         f.setPath("asddfdgsdsgfsd");
-        assertFalse(f.fileReader());
+        assertFalse(f.fileReader(),"Devia devolver False");
     }
 
 }

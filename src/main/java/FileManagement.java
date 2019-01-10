@@ -1,12 +1,12 @@
 import Interfaces.FileManagementInterface;
 
 import java.io.*;
-import java.io.FileReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
@@ -15,23 +15,31 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     private int querycounter; //linhas da matriz
     private String path = "files";
     private File[] dirfiles;
-    private File[] dirTempfiles;
     private int[][] matrixequivalencia;
     QueryManagement query;
 
-
+    /**
+     * Construtor genérico da classe FileManagement com um path costumizado
+     *
+     * @param path
+     */
     public FileManagement(String path) {
 
         this.path = path;
     }
 
     /**
-     * Construtor genérico da classe vazio
+     * Construtor genérico da classe FileManagement com o path predefinido;
      */
     public FileManagement() {
         this.path = path;
     }
 
+    /**
+     * Construtor genérico da classe FileManagement com integração de uma query
+     *
+     * @param query
+     */
     public FileManagement(QueryManagement query) {
         this.query = query;
     }
@@ -62,6 +70,8 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     /**
      * Vai buscar os ficheiros a serem lidos no caminho indicado pelo utilizador
      * LF-01.L2 + LF-01.L1
+     *
+     * @return Array de File com os ficheiros existentes na pasta
      */
     private File[] setFiles() {
         File dirpath = new File(path);
@@ -114,120 +124,83 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public ArrayList<String> getFilesName() {
 
+        ArrayList<String> n = new ArrayList<>();
+        if (new File(path).exists()) {
+            File[] f = new File(path).listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+            n = new ArrayList<String>();
 
-        File[] f = new File(path).listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
-        ArrayList<String> n = new ArrayList<String>();
-
-        for (int i = 0; i < f.length; i++) {
-            n.add(f[i].getName());
+            for (int i = 0; i < f.length; i++) {
+                n.add(f[i].getName());
+            }
         }
-
         return n;
     }
 
     /**
-     * @return um array de strings com os nomes dos ficheiros armazenados no arrays dirFiles
+     * @return Array de strings com os nomes dos ficheiros armazenados no arrays dirFiles
      */
     public String[] getFileString() {
 
-        String[] dirfilestring = new String[dirfiles.length];
-        if (this.dirfiles.length > 0) {
-            for (int ix = 0; ix < dirfiles.length; ix++)
-                dirfilestring[ix] = dirfiles[ix].toString();
+        String[] dirfilestring = null;
+        if (new File(path).exists()) {
+            dirfilestring = new String[dirfiles.length];
+            if (this.dirfiles.length > 0) {
+                for (int ix = 0; ix < dirfiles.length; ix++) {
+                    dirfilestring[ix] = dirfiles[ix].toString();
+                }
+            }
         }
         return dirfilestring;
     }
 
     /**
-     * Vai buscar os ficheiros temporários criados, com a informação organizada
+     * Remove todos os numero e caracteres especiais da string
      *
-     * @return um array de Files com os ficheiros temporarios limpos de caracteres especiais e numeros
+     * @param content String desejada para limpar
+     * @return retorna a mesma frase sem numeros e caracteres.
+     * @throws IOException
      */
-    private File[] setTempFiles() {
-        File dirpath = new File(path);
-        FilenameFilter textFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".tmp");
-            }
-        };
-
-        dirTempfiles = dirpath.listFiles(textFilter);
-        return dirTempfiles;
+    private String clearNumbersandChars(String content) throws IOException {
+        content = content.replaceAll("[^\\p{L} ]", "");
+        return content;
     }
 
-    /**
-     * LF-01.1.A
-     *
-     * @param content  ArrayList com o conteúdo do documento, organizado linha a linha, sem números e sem pontuações
-     * @param filename Nome do ficheiro de onde a informação foi lida. Passará para o ficheiro temporário.
-     * @return sucesso (ou não) do método
-     */
-    public boolean createTempfile(ArrayList<String> content, String filename) {
-
-        File directory = new File(path);
-
-        try {
-            File temp = File.createTempFile(filename + "temp", ".tmp", directory);
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-            for (String string : content)
-                bw.write(string);
-
-            bw.close();
-            temp.deleteOnExit(); //como a função bem diz, quando o programa terminar, apaga os ficheiros temporários
-            return true;
-
-        } catch (IOException e) {
-            return false;
-        }
-
-    }
 
     /**
      * LF-01 + LF-01.1 + Implemetação LF-01.1.A
-     * Lê os ficheiros e cria versões temporárias deles sem número e sem pontuação, invocando outro método
+     * Lê os ficheiros, remove os numeros existentes chamando a função clearNumbersandChars()
+     * e re-escreve o resultado anterior para o ficheiro.
      *
-     * @return se a operação de criação de ficheiros temporários foi bem sucecida
+     * @return True se a função for bem sucedida. false se algo correu mal.
      */
     public boolean fileReader() {
 
-        String line;
-        ArrayList<String> content;
-        setFiles();
+        boolean checker = false;
 
-        boolean checker = true;
-
-        for (int ix = 0; ix < filecounter; ix++) {
-
-            content = new ArrayList<String>();
-
+        if (new File(path).exists()) {
+            setFiles();
             try {
-                BufferedReader br = new BufferedReader(new FileReader(this.dirfiles[ix]));
+                for (int i = 0; i < this.dirfiles.length; i++) {
 
-                while ((line = br.readLine()) != null) {
-                    content.add(line.replaceAll("[^\\p{L} ]", ""));
-                }
+                    Path newfile = Paths.get(this.dirfiles[i].toString());
+                    Charset cset = StandardCharsets.UTF_8;
 
-                boolean work = createTempfile(content, this.dirfiles[ix].getName());
-                if (work == true && checker == true) {
-                    checker = true;
-                } else {
-                    checker = false;
+                    String content = new String(Files.readAllBytes(newfile), cset);
+                    content = clearNumbersandChars(content);
+
+                    Files.write(newfile, content.getBytes(cset));
 
                 }
 
-            } catch (IOException e) {
-                return false;
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
 
+            for (int j = 0; j < this.dirfiles.length; j++) {
+                checker = this.dirfiles[j].exists();
+            }
         }
-
-        if (checker == true) {
-            return checker;
-        } else {
-            return checker;
-        }
-
+        return checker;
     }
 
     /**
@@ -238,13 +211,13 @@ public class FileManagement<T> implements FileManagementInterface<T> {
     public int[][] queryFile() {
 
         setQuerycounter(query.getTrimmedquery().size());
-        setTempFiles();
+        setFiles();
         matrixequivalencia = new int[filecounter][query.getTrimmedquery().size()];
 
-        for (int ix = 0; ix < this.dirTempfiles.length; ix++) {
+        for (int ix = 0; ix < this.dirfiles.length; ix++) {
             String line;
             try {
-                BufferedReader br = new BufferedReader(new FileReader(this.dirTempfiles[ix]));
+                BufferedReader br = new BufferedReader(new FileReader(this.dirfiles[ix]));
 
                 while ((line = br.readLine()) != null) {
                     for (int i = 0; i < query.getTrimmedquery().size(); i++) {

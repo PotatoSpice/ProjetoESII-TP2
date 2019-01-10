@@ -17,6 +17,7 @@ public class MatrixManagement {
         columns = fileManagement.getFilecounter();
         rows = fileManagement.getQuerycounter();
         this.grausemelhanca = new double[this.columns];
+        this.ocurrencias = new int[columns];
     }
 
     /**
@@ -41,8 +42,7 @@ public class MatrixManagement {
      * Pesquisa na matriz local. Se alguma dada palvra existe(>0), incrementa na sua posição da matriz de ocurrencias.
      * Como requirido no requisito LF-01.3
      */
-    public void occurrences() {
-        ocurrencias= new int[rows];
+    public int[] occurrences() {
         for (int ix = 0; ix < columns; ix++) {
             for (int i2 = 0; i2 < rows; i2++) {
                 if(matrizlocal[ix][i2]>0){
@@ -50,6 +50,15 @@ public class MatrixManagement {
                 }
             }
         }
+        return ocurrencias;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
     }
 
     /**

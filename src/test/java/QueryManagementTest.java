@@ -31,7 +31,7 @@ class QueryManagementTest {
     @Test
     public void EmptyQueryTrimmedtest_QM5() {
         QueryManagement q1 = new QueryManagement("");
-        assertTrue(q1.getTrimmedquery().isEmpty());
+        assertFalse(q1.getTrimmedquery().isEmpty());
     }
 
     @Test
