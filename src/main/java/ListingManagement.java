@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ListingManagement<T> {
 
@@ -57,7 +56,7 @@ public class ListingManagement<T> {
 
         for (int ix = 0; ix < max; ix++) {
             if (arrayGraus[ix] < maximo)
-                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]);
+                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
         }
 
         return classificacao;
@@ -75,7 +74,7 @@ public class ListingManagement<T> {
 
         for (int ix = 0; ix < max; ix++)
             if (arrayGraus[ix] > minimo)
-                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]);
+                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
 
         return classificacao;
     }
@@ -91,9 +90,17 @@ public class ListingManagement<T> {
         classificacao = new ArrayList<String>();
 
         for (int ix = 0; ix < maxtotal; ix++)
-            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]);
+            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
 
         return classificacao;
 
+    }
+
+    public void setArrayGraus(double[] arrayGraus) {
+        this.arrayGraus = arrayGraus;
+    }
+
+    public void setArrayFicheiros(String[] arrayFicheiros) {
+        this.arrayFicheiros = arrayFicheiros;
     }
 }

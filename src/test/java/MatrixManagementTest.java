@@ -23,12 +23,17 @@ class MatrixManagementTest {
 
     @Test
     void occurrencesArraySizeTestValid_MM1() {
-        assertEquals(matriz.getColumns(),f.getFileNumber());
+        assertEquals(matriz.getColumns(),f.getFileNumber(),"O numero de colunas não tá igual ao numero da query");
     }
 
     @Test
-    public void ocurrencesArraytest_MM2(){
-        assertArrayEquals(new int[]{1},matriz.occurrences());
+    public void ArraytestSizeROwstest_MM2(){
+        assertEquals(q.getTrimmedquery().size(),matriz.getRows(),"O numero de filas não ta igual ao numero de ficheiros");
+    }
+
+    @Test
+    public void Ocorrencestest_MM3(){
+        assertArrayEquals(new int[]{1,1,1,1,1},matriz.occurrences(),"O array não tem o numero de ocorrencias esperado");
     }
 
     @Test

@@ -28,8 +28,10 @@ public class Main {
     */
         QueryManagement q = new QueryManagement("query de teste");
         FileManagement f = new FileManagement(q);
-        f.fileReader();
-        q.getQuery();
+        System.out.println(f.fileReader());
+        f.queryFile();
+
+
        /* for (int[] x : f.getMatrixequivalencia())
         {
             for (int y : x)

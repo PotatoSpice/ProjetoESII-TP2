@@ -17,7 +17,7 @@ public class MatrixManagement {
         columns = fileManagement.getFilecounter();
         rows = fileManagement.getQuerycounter();
         this.grausemelhanca = new double[this.columns];
-        this.ocurrencias = new int[rows];
+        this.ocurrencias = new int[columns];
     }
 
     /**
