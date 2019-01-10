@@ -70,7 +70,7 @@ class FileManagementTest {
     @Test
     public void getFileStringValid_FM12() {
         f.fileReader();
-        assertArrayEquals(new String[]{f.getPath() + "\\ficheiro1.txt", f.getPath() + "\\ficheiro2.txt", f.getPath() + "\\ficheiro3.txt", f.getPath() + "\\ficheiro4.txt", f.getPath() + "\\ficheiro5.txt"}, f.getFileString(), "Os nomes dos ficheiros nao sao iguais");
+        assertArrayEquals(new String[]{f.getPath() + File.separator+"ficheiro1.txt", f.getPath() + File.separator +"ficheiro2.txt", f.getPath() +File.separator +"ficheiro3.txt", f.getPath() + File.separator+"ficheiro4.txt", f.getPath() + File.separator+"ficheiro5.txt"}, f.getFileString(), "Os nomes dos ficheiros nao sao iguais");
     }
 
     @Test
