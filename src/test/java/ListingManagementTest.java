@@ -75,7 +75,31 @@ class ListingManagementTest {
     }
 
     @Test
-    void listaMinimoValidtest_LM6() {
+    public void listaMaximoBVAmintest_LM6(){
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        ArrayList alist = new ArrayList();
+
+        assertEquals(alist,list.listaMaximo(-1),"A lista naõ está a filtrar os maximos");
+    }
+
+    @Test
+    public void listaMaximoBVAminValidtest_LM7(){
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        ArrayList alist = new ArrayList();
+
+        assertEquals(alist,list.listaMaximo(0),"A lista naõ está a filtrar os maximos");
+    }
+
+    @Test
+    public void listaMinimoValidtest_LM8() {
         String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
         list.setArrayFicheiros(array2rqfae);
         double[] graustest = new double[]{1, 2, 3, 4, 5};
@@ -86,10 +110,61 @@ class ListingManagementTest {
         alist.add("Ficheiro: ficheiro5; Grau de Semelhança: 5.0\n");
 
         assertEquals(alist,list.listaMinimo(3),"As listas nao estão devidamente validadas_Minimo");
-        assertTrue(alist.equals(list.listaMinimo(3)),"Assert de teste");
     }
 
     @Test
-    void listaTotalMax() {
+    void listaMinimoBVAInvalidtest_LM9() {
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        ArrayList alist = new ArrayList();
+
+        assertEquals(alist,list.listaMinimo(-1),"As listas nao estão devidamente validadas_Minimo");
     }
+
+    @Test
+    void listaMinimoBVAvalidMintest_LM10() {
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        ArrayList alist = new ArrayList();
+
+        assertEquals(alist,list.listaMinimo(0),"As listas nao estão devidamente validadas_Minimo");
+    }
+
+    @Test
+    void listaTotalMaxValidtest_LM11() {
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        assertEquals(3,list.listaTotalMax(3).size(),"O numero de resultados não é igual ao introduzido");
+    }
+
+    @Test
+    void listaTotalMaxInvalidtest_LM12() {
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        assertEquals(0,list.listaTotalMax(-1).size(),"O numero de resultados não é igual ao introduzido");
+    }
+
+    @Test
+    void listaTotalMaxBVAminValidtest_LM13() {
+        String[] array2rqfae = {"ficheiro1", "ficheiro2", "ficheiro3", "ficheiro4", "ficheiro5"};
+        list.setArrayFicheiros(array2rqfae);
+        double[] graustest = new double[]{1, 2, 3, 4, 5};
+        list.setArrayGraus(graustest);
+
+        assertEquals(0,list.listaTotalMax(0).size(),"O numero de resultados não é igual ao introduzido");
+    }
+
+
 }

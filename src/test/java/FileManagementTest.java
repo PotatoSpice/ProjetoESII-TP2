@@ -73,7 +73,7 @@ class FileManagementTest {
     }
 
     @Test
-    public void getFileStringValid_FM12() {
+    public void getFileStringValid_FM9() {
         f.fileReader();
         String[] str = new String[]{f.getPath() + File.separator+"ficheiro1.txt", f.getPath() + File.separator +"ficheiro2.txt", f.getPath() +File.separator +"ficheiro3.txt", f.getPath() + File.separator+"ficheiro4.txt", f.getPath() + File.separator+"ficheiro5.txt"};
         String[] teststr = f.getFileString();
@@ -82,28 +82,63 @@ class FileManagementTest {
     }
 
     @Test
-    public void getFileStringInvalidFolder_FM13() {
+    public void getFileStringInvalidFolder_FM10() {
         f.setPath(File.separator + "asdsgsdgfd");
         f.fileReader();
         assertTrue(f.getFileString() == null, "Devia ter dado true (null)");
     }
 
     @Test
-    public void getFileStringEmptyFolder_FM14() {
+    public void getFileStringEmptyFolder_FM11() {
         f.setPath(File.separator + "files" + File.separator + "vazia");
         f.fileReader();
         assertTrue(f.getFileString() == null, "Devia ter dado true (null)");
     }
 
     @Test
-    public void fileReadertestValid_FM15() {
+    public void fileReadertestValid_FM12() {
         assertTrue(f.fileReader(), "Devia devolver true");
     }
 
     @Test
-    public void fileReaderNofile_FM16() {
-        f.setPath("asddfdgsdsgfsd");
+    public void fileReaderNofile_FM14() {
+        f.setPath(File.separator +"files"+File.separator+"vazia");
         assertFalse(f.fileReader(), "Devia devolver False");
+    }
+    @Test
+    public void fileReaderInvalidPath_FM13(){
+        f.setPath("afdfgrsdfds");
+        assertFalse(f.fileReader(),"Devia devolver False");
+    }
+
+    @Test
+    public void clearNumbersandCharsValidTest_FM17(){
+        String str = "qwe1rgrth546hg";
+        try {
+            assertEquals("qwergrthhg",f.clearNumbersandChars(str));
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+    }
+
+    @Test
+    public void clearNumbersandCharEmpty_FM18(){
+        String str = "";
+        try {
+            assertEquals("",f.clearNumbersandChars(str));
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+    }
+
+    @Test
+    public void clearNumberandCharNull_F19(){
+        String str = null;
+        try {
+            assertEquals(null,f.clearNumbersandChars(str));
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
     }
 
 }
