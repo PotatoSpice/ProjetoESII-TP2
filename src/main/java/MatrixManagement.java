@@ -27,7 +27,7 @@ public class MatrixManagement {
         occurrences();
         for(int ix=0; ix<columns; ix++){
             for(int i2=0; i2<rows; i2++){
-                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*1+Math.log10(columns/ocurrencias[i2]);
+                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*(1+Math.log10(columns/ocurrencias[i2]));
             }
         }
         return matrizcalculada;
@@ -63,13 +63,33 @@ public class MatrixManagement {
 
     /**
      * Referente ao requisito Calculos-01
-     *
-     * ISSUE:Problemas na interpretação da fórmula. Esclarecer problemas. Fórmula errada ou incompleta.
+     * Executa fórmula pretendida, incluindo os somatórios.
      */
-    public double[] grauSemelhanca(){
-        for(int ix=0; ix<columns; ix++){
-            for (int i2=0; i2<rows;i2++){
-                grausemelhanca[ix]=(matrizcalculada[ix][i2]*ocurrencias[i2])/(Math.sqrt(matrizcalculada[ix][i2]*matrizcalculada[ix][i2]))*(Math.sqrt(ocurrencias[i2]^2));
+    public double[] grauSemelhanca() {
+        grausemelhanca = new double[columns];
+        double sumatorio1 = 0.0; //sumatorio para a primeira parte da fórmula
+        double sumatorio2 = 0.0; //sumatório para a parte de baixo da fórmula
+        double sumatorio3 = 0.0; //sumatório para a parte de baixo da fórmula
+
+        for (int ix = 0; ix < columns; ix++) {
+            for (int i2 = 0; i2 < rows; i2++) {
+                sumatorio1 = sumatorio1 + (matrizcalculada[ix][i2] * ocurrencias[i2]);
+            }
+        }
+
+        for (int ix = 0; ix < columns; ix++) {
+            for (int i2 = 0; i2 < rows; i2++) {
+                sumatorio2 = sumatorio2 + (matrizcalculada[ix][i2] * matrizcalculada[ix][i2]);
+            }
+        }
+
+        for (int i2 = 0; i2 < rows; i2++) {
+            sumatorio3 = sumatorio3 + (ocurrencias[i2] ^ 2);
+        }
+
+        for (int ix = 0; ix < columns; ix++) {
+            for (int i2 = 0; i2 < rows; i2++) {
+                grausemelhanca[ix] = (sumatorio1) / (Math.sqrt(sumatorio2)) * (Math.sqrt(sumatorio3));
             }
         }
         return grausemelhanca;

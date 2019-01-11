@@ -28,4 +28,11 @@ public class InputManager {
         String query=sc1.next();
         this.query = query;
     }
+
+    //Fica aqui até ver!
+    /*public void setQueryEnter(){
+        while(!in.hasNextLine()) {
+            trimmedQuery.add(in.next());
+        }
+    } */
 }
