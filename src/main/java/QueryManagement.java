@@ -12,6 +12,7 @@ public class QueryManagement {
 
     public QueryManagement(String query){
         this.query=query;
+        trimQuery();
     }
 
     //Possívelmente é desnecessário, mas fica para já!
@@ -19,16 +20,24 @@ public class QueryManagement {
         return query;
     }
 
-    //Não sei se assim funcionará direito, mas depois vê-se. Diz-me o que achares!
+    //Não sei se assim funcionará direito, mas depois vê-se. Diz-me o que achares! Mas acho que está
     public void trimQuery(){
 
+      /*  for(String w:query.split("\\s"))
 
-       while(query.trim().split("\\s+")!=null)
-        this.trimmedquery.add(String.valueOf(query.trim().split("\\s+")));
+            this.trimmedquery.add(w); */
 
-    }
+        String[] tempstring=query.trim().split("[\\s+]");
+
+        for(int ix=0; ix<tempstring.length; ix++)
+            this.trimmedquery.add(tempstring[ix]);
+
+
+
+        }
 
     public ArrayList<String> getTrimmedquery() {
         return trimmedquery;
+
     }
 }
