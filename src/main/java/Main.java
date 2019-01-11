@@ -1,12 +1,15 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 
         //Vou colocar aqui só para ficar já
 
-        InputManager inputManager = new InputManager();
+        /*InputManager inputManager = new InputManager();
 
         do{
 
@@ -21,23 +24,31 @@ public class Main {
         }while(inputManager.getQuery().equals(null));
 
         QueryManagement queryManagement = new QueryManagement(inputManager.getQuery());
-        FileManagement fileManagement = new FileManagement("C:\\Users\\Rodrigo\\OneDrive\\ESTG\\TXT FIles");
+        FileManagement fileManagement = new FileManagement(inputManager.getPath());
+    */
+        QueryManagement q = new QueryManagement("query de teste");
+        FileManagement f = new FileManagement(q);
+        System.out.println(f.fileReader());
+        f.queryFile();
 
-        System.out.println(fileManagement.fileReader());
-        fileManagement.queryFile();
-        System.out.println(fileManagement.getFilecounter()+" "+ fileManagement.getQuerycounter());
-        MatrixManagement matrixManagement = new MatrixManagement(fileManagement);
-        ListingManagement listingManagement = new ListingManagement(matrixManagement, fileManagement);
 
-        ArrayList<String> listagem = listingManagement.listaCompleta();
-
-        for(String s: listagem){
-
-            System.out.println(s);
-
+       /* for (int[] x : f.getMatrixequivalencia())
+        {
+            for (int y : x)
+            {
+                System.out.print(y + "| ");
+            }
+            System.out.println();
         }
 
+      //  System.out.println(f.getQuerycounter());
+       // System.out.println(f.getFilecounter());
 
+        MatrixManagement matriz = new MatrixManagement(f);
+
+        ListingManagement list = new ListingManagement(matriz, f);
+
+        System.out.println(matriz.getRows());
+    */
     }
-
 }
