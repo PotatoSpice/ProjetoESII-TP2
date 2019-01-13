@@ -23,7 +23,7 @@ public class Main {
         QueryManagement queryManagement = new QueryManagement(inputManager.getQuery());
         FileManagement fileManagement = new FileManagement(inputManager.getPath());
     */
-        QueryManagement q = new QueryManagement("Lorem sapien");
+        QueryManagement q = new QueryManagement("lorem sapien");
         FileManagement f = new FileManagement(q);
         f.fileReader();
         f.queryFile();
@@ -51,6 +51,10 @@ public class Main {
             System.out.println("|");
         }
         System.out.println("--------------------------");
+
+        for(int i = 0;i<matriz.getOcurrencias().length;i++){
+            System.out.println(matriz.getOcurrencias()[i]);
+        }
 
         for(int i = 0;i<matriz.getGrausemelhanca().length;i++) {
             System.out.println(matriz.getGrausemelhanca()[i]);

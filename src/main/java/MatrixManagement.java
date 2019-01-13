@@ -17,7 +17,7 @@ public class MatrixManagement {
         columns = fileManagement.getFilecounter();
         rows = fileManagement.getQuerycounter();
         this.grausemelhanca = new double[this.columns];
-        this.ocurrencias = new int[columns];
+        this.ocurrencias = new int[rows];
         this.matrizcalculada = new double[columns][rows];
         convertMatrixToDouble(fileManagement);
     }
@@ -37,7 +37,7 @@ public class MatrixManagement {
     public double[][] setMatrizCalculada(){
         for(int ix=0; ix<columns; ix++){
             for(int i2=0; i2<rows; i2++){
-                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*1+Math.log10(columns/ocurrencias[i2]);
+                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*(1+Math.log10(columns/ocurrencias[i2]));
             }
         }
         return matrizcalculada;
@@ -88,4 +88,14 @@ public class MatrixManagement {
     public double[] getGrausemelhanca(){
         return grausemelhanca;
     }
+
+    public int[][] getMatrizlocal() {
+        return matrizlocal;
+    }
+
+    public int[] getOcurrencias() {
+        return ocurrencias;
+    }
 }
+
+
