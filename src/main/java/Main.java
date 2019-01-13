@@ -1,78 +1,57 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        //Vou colocar aqui só para ficar já
+        Scanner in = new Scanner(System.in);
+        System.out.print("Intoduza query a pesquisar: ");
+        String query = in.nextLine();
+        QueryManagement q = new QueryManagement(query);
 
-        /*InputManager inputManager = new InputManager();
+        System.out.println("Escolha a listagem: ");
+        System.out.println("1- Listagem completa");
+        System.out.println("2- Listagem com valor maximo");
+        System.out.println("3- Listagem com valor minimo");
+        System.out.println("4- Listagem com maximo de resultados");
 
-        do{
-
-            inputManager.setPath();
-
-        }while(inputManager.getPath().equals(null));
-
-        do{
-
-            inputManager.setQuery();
-
-        }while(inputManager.getQuery().equals(null));
-
-        QueryManagement queryManagement = new QueryManagement(inputManager.getQuery());
-        FileManagement fileManagement = new FileManagement(inputManager.getPath());
-    */
-        QueryManagement q = new QueryManagement("lorem sapien");
+        Scanner typelist = new Scanner(System.in);
+        int[] escolha = new int[5];
+        escolha[0] = typelist.nextInt();
         FileManagement f = new FileManagement(q);
         f.fileReader();
         f.queryFile();
 
-
-        for (int[] x : f.getMatrixequivalencia()) {
-            for (int y : x) {
-                System.out.print(y + " ");
-            }
-            System.out.println("|");
-        }
-
-        System.out.println("--------------------------");
         MatrixManagement matriz = new MatrixManagement(f);
         matriz.occurrences();
         matriz.setMatrizCalculada();
         matriz.grauSemelhanca();
 
-
-
-        for (double[] x : matriz.getMatrizCalculada()) {
-            for (double y : x) {
-                System.out.print(y + " ");
-            }
-            System.out.println("|");
-        }
-        System.out.println("--------------------------");
-
-        for(int i = 0;i<matriz.getOcurrencias().length;i++){
-            System.out.println(matriz.getOcurrencias()[i]);
-        }
-
-        for(int i = 0;i<matriz.getGrausemelhanca().length;i++) {
-            System.out.println(matriz.getGrausemelhanca()[i]);
-        }
-
-
-        ListingManagement list = new ListingManagement(matriz,f);
-        System.out.println(list.listaCompleta());
-
-/*
-      //  System.out.println(f.getQuerycounter());
-       // System.out.println(f.getFilecounter());
-
-        MatrixManagement matriz = new MatrixManagement(f);
-
         ListingManagement list = new ListingManagement(matriz, f);
+        switch (escolha[0]) {
+            case 1:
+                System.out.println(list.listaCompleta());
+                break;
+            case 2:
+                System.out.print("valor máximo: ");
+                escolha[1] = typelist.nextInt();
+                System.out.println(list.listaMaximo(escolha[1]));
+                break;
+            case 3:
+                System.out.print("valor minimo: ");
+                escolha[2] = typelist.nextInt();
+                System.out.println(list.listaMinimo(escolha[2]));
+            case 4:
+                System.out.print("Escolha o numero de resultados a apresentar: ");
+                escolha[3] = typelist.nextInt();
+                System.out.println(list.listaTotalMax(escolha[3]));
+                break;
+            default:
+                System.out.println("Opção nao valida!");
+        }
+        in.close();
+        typelist.close();
 
-        System.out.println(matriz.getRows());
-    */
     }
 }

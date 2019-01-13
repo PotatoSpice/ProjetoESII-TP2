@@ -37,6 +37,7 @@ public class MatrixManagement {
     public double[][] setMatrizCalculada(){
         for(int ix=0; ix<columns; ix++){
             for(int i2=0; i2<rows; i2++){
+                if(ocurrencias[i2] > 0)
                 this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*(1+Math.log10(columns/ocurrencias[i2]));
             }
         }
