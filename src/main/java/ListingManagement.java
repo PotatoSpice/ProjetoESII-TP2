@@ -37,7 +37,7 @@ public class ListingManagement<T> {
         classificacao = new ArrayList<String>();
 
         for (int ix = 0; ix < max; ix++)
-            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
+            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix] + "\n");
 
 
         return classificacao;
@@ -54,11 +54,12 @@ public class ListingManagement<T> {
 
         classificacao = new ArrayList<String>();
 
-        for (int ix = 0; ix < max; ix++) {
-            if (arrayGraus[ix] < maximo)
-                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
+        if (maximo >= 0) {
+            for (int ix = 0; ix < max; ix++) {
+                if (arrayGraus[ix] < maximo)
+                    classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix] + "\n");
+            }
         }
-
         return classificacao;
     }
 
@@ -71,11 +72,11 @@ public class ListingManagement<T> {
     public ArrayList<String> listaMinimo(int minimo) {
 
         classificacao = new ArrayList<String>();
-
-        for (int ix = 0; ix < max; ix++)
-            if (arrayGraus[ix] > minimo)
-                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
-
+        if (minimo > 0) {
+            for (int ix = 0; ix < max; ix++)
+                if (arrayGraus[ix] > minimo)
+                    classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix] + "\n");
+        }
         return classificacao;
     }
 
@@ -88,12 +89,11 @@ public class ListingManagement<T> {
     public ArrayList<String> listaTotalMax(int maxtotal) {
 
         classificacao = new ArrayList<String>();
-
-        for (int ix = 0; ix < maxtotal; ix++)
-            classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix]+"\n");
-
+        if (maxtotal >= 0) {
+            for (int ix = 0; ix < maxtotal; ix++)
+                classificacao.add("Ficheiro: " + arrayFicheiros[ix] + "; Grau de Semelhança: " + arrayGraus[ix] + "\n");
+        }
         return classificacao;
-
     }
 
     public void setArrayGraus(double[] arrayGraus) {

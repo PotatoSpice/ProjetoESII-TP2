@@ -13,11 +13,26 @@ public class MatrixManagement {
      * @param fileManagement Estrutra fileManagement com os parametros a copiar
      */
     public MatrixManagement(FileManagement fileManagement){
-        matrizlocal = fileManagement.getMatrixequivalencia();
+        this.matrizlocal = fileManagement.getMatrixequivalencia();
         columns = fileManagement.getFilecounter();
         rows = fileManagement.getQuerycounter();
         this.grausemelhanca = new double[this.columns];
         this.ocurrencias = new int[rows];
+        this.matrizcalculada = new double[columns][rows];
+        convertMatrixToDouble(fileManagement);
+    }
+
+    /**
+     * converte a matrixEquivalencia(int) para a matrixCalculada(double)
+     * @param file
+     */
+    private void convertMatrixToDouble(FileManagement file){
+        int[][] tempmatriz = file.getMatrixequivalencia();
+        for(int i = 0;i<this.columns;i++){
+            for(int j = 0;j<this.rows;j++) {
+                this.matrizcalculada[i][j] = tempmatriz[i][j];
+            }
+        }
     }
 
     /**
@@ -25,18 +40,16 @@ public class MatrixManagement {
      * Pela minha lógica, se vai dizwer por 0, é porque não existe, logo mantem-se inalterado.
      */
     public double[][] setMatrizCalculada(){
-        occurrences();
         for(int ix=0; ix<columns; ix++){
             for(int i2=0; i2<rows; i2++){
-                if(ocurrencias[i2]!=0) {
-                    this.matrizcalculada[ix][i2] = matrizlocal[ix][i2] * (1 + Math.log10(columns / ocurrencias[i2]));
-                }
+                if(ocurrencias[i2] > 0)
+                this.matrizcalculada[ix][i2]=matrizlocal[ix][i2]*(1+Math.log10(columns/ocurrencias[i2]));
             }
         }
         return matrizcalculada;
     }
 
-    public double[][] getMatrizCalculada(){
+    public double[][]getMatrizCalculada(){
         return this.matrizcalculada;
     }
 
@@ -93,4 +106,14 @@ public class MatrixManagement {
     public double[] getGrausemelhanca(){
         return grausemelhanca;
     }
+
+    public int[][] getMatrizlocal() {
+        return matrizlocal;
+    }
+
+    public int[] getOcurrencias() {
+        return ocurrencias;
+    }
 }
+
+

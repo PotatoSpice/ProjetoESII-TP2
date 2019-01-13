@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class MatrixManagementTest {
@@ -11,7 +10,7 @@ class MatrixManagementTest {
 
     @BeforeEach
     void setUp() {
-        q = new QueryManagement("Java");
+        q = new QueryManagement("lorem sapien");
         f = new FileManagement(q);
         f.fileReader();
         f.queryFile();
@@ -32,10 +31,27 @@ class MatrixManagementTest {
         assertEquals(q.getTrimmedquery().size(),matriz.getRows(),"O numero de filas não ta igual ao numero de ficheiros");
     }
 
-    @Disabled
-    public void Ocorrencestest_MM3(){
-        assertArrayEquals(new int[]{1,1,1,1,1},matriz.occurrences(),"O array não tem o numero de ocorrencias esperado");
+    @Test
+    public void OcorrencesValidtest_MM3(){
+        int[][] testmatriz = matriz.getMatrizlocal();
+        System.out.println(matriz.getColumns());
+        System.out.println(matriz.getRows());
+        testmatriz[2][0] = 1;
+        for (int[] x : testmatriz) {
+            for (int y : x) {
+                System.out.print(y + "! ");
+            }
+            System.out.println("|");
+        }
+
+        assertArrayEquals(new int[]{5,3},matriz.occurrences(),"O array não tem o numero de ocorrencias esperado");
     }
+
+    @Test
+    public void OccurrencesArraySizetest_MM4(){
+        assertTrue(matriz.occurrences().length == matriz.getRows());
+    }
+
 
     @Test
     void grauSemelhanca() {

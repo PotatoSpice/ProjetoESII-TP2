@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
 
 public class FileManagement<T> implements FileManagementInterface<T> {
 
@@ -160,8 +160,10 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      * @return retorna a mesma frase sem numeros e caracteres.
      * @throws IOException
      */
-    private String clearNumbersandChars(String content) throws IOException {
-        content = content.replaceAll("[^\\p{L} ]", "");
+    public String clearNumbersandChars(String content) throws IOException {
+        if (content != null) {
+            content = content.replaceAll("[^\\p{L} ]", "");
+        }
         return content;
     }
 
@@ -210,40 +212,40 @@ public class FileManagement<T> implements FileManagementInterface<T> {
      */
     public int[][] queryFile() {
 
-        setQuerycounter(query.getTrimmedquery().size());
+        int trimmedQuerySize = query.getTrimmedquery().size();
+        setQuerycounter(trimmedQuerySize);
         setFiles();
-        matrixequivalencia = new int[filecounter][query.getTrimmedquery().size()];
 
-        for (int ix = 0; ix < this.dirfiles.length; ix++) {
-            String line;
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(this.dirfiles[ix]));
+        this.matrixequivalencia = new int[filecounter][trimmedQuerySize];
 
-                while ((line = br.readLine()) != null) {
-                    for (int i = 0; i < query.getTrimmedquery().size(); i++) {
-                        int lastindex = 0;
-                        if (line.contains(query.getTrimmedquery().get(i))) {
+        for (int fileNo = 0; fileNo < dirfiles.length; fileNo++) {
 
-                            while ((lastindex = line.indexOf(query.getTrimmedquery().get(i), lastindex)) <= query.getTrimmedquery().size() && lastindex != -1) {
-                                matrixequivalencia[ix][i] = matrixequivalencia[ix][i] + 1;
+            for (int palavra = 0; palavra < trimmedQuerySize; palavra++) {
+                try {
+                    FileInputStream fstream = new FileInputStream(dirfiles[fileNo]);
+                    DataInputStream in = new DataInputStream(fstream);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                    String strLine;
+                    while ((strLine = br.readLine()) != null) {
+                        int count = 0;
+                        strLine = strLine.toLowerCase();
+                        int startIndex = strLine.indexOf(query.getTrimmedquery().get(palavra).toLowerCase());
+                        while (startIndex != -1) {
+                            count++;
+                            startIndex = strLine.indexOf(query.getTrimmedquery().get(palavra).toLowerCase(),
+                                    startIndex + query.getTrimmedquery().get(palavra).length());
 
-                                lastindex++;
-
-                            }
                         }
+                        matrixequivalencia[fileNo][palavra] = count;
                     }
+
+                in.close();
+                } catch (Exception e) {//Catch exception if any
+                    System.err.println("Error: " + e.getMessage());
                 }
-
-            } catch (FileNotFoundException e) {
-                return null;
-            } catch (IOException e) {
-                return null;
-
             }
         }
-
         return matrixequivalencia;
-
     }
 
     /**
