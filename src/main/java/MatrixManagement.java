@@ -22,6 +22,10 @@ public class MatrixManagement {
         convertMatrixToDouble(fileManagement);
     }
 
+    /**
+     * converte a matrixEquivalencia(int) para a matrixCalculada(double)
+     * @param file
+     */
     private void convertMatrixToDouble(FileManagement file){
         int[][] tempmatriz = file.getMatrixequivalencia();
         for(int i = 0;i<this.columns;i++){
