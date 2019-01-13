@@ -33,18 +33,7 @@ class MatrixManagementTest {
 
     @Test
     public void OcorrencesValidtest_MM3(){
-        int[][] testmatriz = matriz.getMatrizlocal();
-        System.out.println(matriz.getColumns());
-        System.out.println(matriz.getRows());
-        testmatriz[2][0] = 1;
-        for (int[] x : testmatriz) {
-            for (int y : x) {
-                System.out.print(y + "! ");
-            }
-            System.out.println("|");
-        }
-
-        assertArrayEquals(new int[]{5,3},matriz.occurrences(),"O array não tem o numero de ocorrencias esperado");
+        assertArrayEquals(new int[]{4,3},matriz.occurrences(),"O array não tem o numero de ocorrencias esperado");
     }
 
     @Test
